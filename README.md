@@ -120,6 +120,14 @@ same:
   supported for some models; use `aws bedrock list-inference-profiles` to
   find the `us.anthropic....` / `global.anthropic....` ID for your model
   and pass that as `--model-id` / `BEDROCK_MODEL_ID` instead.
+- **We also tried wiring this into a real Bedrock AgentCore policy engine**
+  (Cedar-based tool authorization) and hit a genuine, fully-diagnosed
+  permission wall — see
+  [`docs/AGENTCORE_INVESTIGATION.md`](docs/AGENTCORE_INVESTIGATION.md) for
+  the exact commands and errors. A real Policy Engine resource does exist
+  in this sandbox; attaching an enforced policy to a real tool needs a
+  Gateway, which needs `iam:PassRole` on a role this sandbox doesn't let
+  us pass, and whose one passable role isn't trusted by AgentCore anyway.
 
 ## Prerequisites
 
