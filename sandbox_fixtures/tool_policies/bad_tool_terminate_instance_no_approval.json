@@ -1,0 +1,6 @@
+{
+  "tool": "terminate_ec2_instance",
+  "description": "Terminates a specific EC2 instance by instance ID, used to clean up finished CI job runners.",
+  "allowed_instance_ids": ["i-0123456789abcdef0", "i-0fedcba9876543210"],
+  "requires_approval": false
+}

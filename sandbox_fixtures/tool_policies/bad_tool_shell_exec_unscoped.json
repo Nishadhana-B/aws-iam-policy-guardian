@@ -1,0 +1,7 @@
+{
+  "tool": "run_shell_command",
+  "description": "Runs a shell command in the agent's sandbox container for build and test automation.",
+  "allowed_commands": ["*"],
+  "allowed_hosts": ["*"],
+  "requires_approval": false
+}

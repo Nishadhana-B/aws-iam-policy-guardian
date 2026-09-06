@@ -4,15 +4,29 @@ Scope is deliberately small — one finished, demo-able loop beats a big
 half-built system. Each milestone should be independently demo-able.
 
 ## M0 — Local, no AWS needed
-- [ ] Heuristic analyzer (wildcard/escalation detection) as a pure function
-- [ ] Unit tests against `sandbox_fixtures/*.json` (mix of clean + bad policies)
-- [ ] CLI entry point: `python -m analyzer.cli sandbox_fixtures/bad_role.json`
+- [x] Heuristic analyzer (wildcard/escalation detection) as a pure function
+- [x] Unit tests against `sandbox_fixtures/*.json` (mix of clean + bad policies)
+- [x] CLI entry point: `python -m analyzer.cli sandbox_fixtures/bad_role.json`
+
+## M0b — Agent Tool Policy Guardian (same pattern, different domain)
+- [x] Heuristic scanner for agent tool policies (unscoped paths/commands/
+      hosts, destructive tool missing an approval gate)
+- [x] Unit tests against `sandbox_fixtures/tool_policies/*.json`
+- [x] `scripts/run_tool_policy_demo_local.py` — same local-fixture + Bedrock
+      pattern as the IAM demo, run and verified against live Bedrock
 
 ## M1 — Sandbox account online
-- [ ] Bedrock model access requested + confirmed in sandbox region
-- [ ] `list_policies` Lambda: enumerate real IAM roles read-only, feed into M0 analyzer
-- [ ] `analyze_and_draft` Lambda: heuristic hits → Bedrock `InvokeModel` → proposed statement, written to DynamoDB
-- [ ] Manual demo: run once, inspect DynamoDB findings by hand (no approval flow yet)
+- [x] Bedrock model access confirmed in sandbox region (`us-west-2`, via
+      inference profile `us.anthropic.claude-haiku-4-5-...`)
+- [ ] ~~`list_policies` Lambda: enumerate real IAM roles read-only~~ --
+      blocked: the sandbox's own bootstrap role AND `WSParticipantRole`
+      both got `AccessDenied` on `iam:CreateRole`; IAM read works, write
+      doesn't. Pivoted to `scripts/run_demo_local.py` (and the tool-policy
+      equivalent) which scan local fixture JSON instead -- same scanner and
+      Bedrock-drafting logic, proven live, no IAM permission needed.
+- [ ] `analyze_and_draft` Lambda deployed for real (`list_policies` Lambda
+      too) -- needs an account that grants IAM write; see
+      "Full deploy" in the README
 
 ## M2 — Human-in-the-loop approval
 - [ ] `request_approval`: SNS email with approve/reject link (signed, single-use)

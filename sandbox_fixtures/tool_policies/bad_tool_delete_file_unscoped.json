@@ -1,0 +1,6 @@
+{
+  "tool": "delete_file",
+  "description": "Deletes a file from the agent's workspace filesystem.",
+  "allowed_paths": ["*"],
+  "requires_approval": false
+}

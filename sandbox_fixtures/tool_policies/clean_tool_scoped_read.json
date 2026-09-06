@@ -1,0 +1,6 @@
+{
+  "tool": "read_file",
+  "description": "Reads a file from the agent's own workspace directory for context.",
+  "allowed_paths": ["/workspace/**"],
+  "requires_approval": false
+}
