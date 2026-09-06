@@ -57,26 +57,32 @@ def draft_fix(policy, rule_ids):
 
 
 def main():
+    print("=" * 70)
+    print("Standalone Python heuristic scan + Bedrock InvokeModel demo.")
+    print("NOT Amazon Bedrock AgentCore -- no Gateway, no Cedar policy engine.")
+    print("=" * 70)
+
     for path in sorted(glob.glob(os.path.join(FIXTURES_DIR, "*.json"))):
         with open(path) as f:
             policy = json.load(f)
 
+        tool_name = policy.get("tool", "?")
         findings = scan_tool_policy(policy)
         print(f"\n########## {os.path.basename(path)} ##########")
         print("Tool policy:")
         print(json.dumps(policy, indent=2))
 
         if not findings:
-            print("No findings -- policy already looks least-privilege.")
+            print(f"ACCESS DECISION: ALLOW -- '{tool_name}' is least-privilege, no violations found.")
             continue
 
         rule_ids = [f.rule_id for f in findings]
-        print("Heuristic flags:", ", ".join(rule_ids))
+        print(f"ACCESS DECISION: DENY -- '{tool_name}' violates {len(findings)} heuristic rule(s):")
         for f in findings:
             print(f"  [{f.severity:>6}] {f.rule_id}: {f.message}")
 
         proposed = draft_fix(policy, rule_ids)
-        print("Bedrock-proposed tightened policy:")
+        print("Bedrock-proposed tightened policy (what would make this ALLOW):")
         print(json.dumps(proposed, indent=2))
 
 
