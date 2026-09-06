@@ -36,6 +36,12 @@ that change unsupervised."
 
 ## Architecture
 
+This diagram is the **IAM Policy Guardian** half specifically (designed,
+not deployed — see "Full deploy" below). The **Agent Tool Policy Guardian**
+follows the identical heuristic → Bedrock → human-approval shape but has
+no deployed infra of its own yet — it runs as the standalone script in
+`scripts/run_tool_policy_demo_local.py`.
+
 ```
                     ┌─────────────────────┐
    trigger  ──────▶ │  Step Functions      │
@@ -101,6 +107,14 @@ export BEDROCK_MODEL_ID=us.anthropic.claude-haiku-4-5-20251001-v1:0  # or any in
 python scripts/run_demo_local.py              # IAM policy statements
 python scripts/run_tool_policy_demo_local.py  # agent tool policies
 ```
+
+## Running the tests
+
+```bash
+pytest -v
+```
+15 tests, no AWS credentials needed — pure unit tests against both
+heuristic scanners.
 
 ## What we learned running this against a real sandbox
 
